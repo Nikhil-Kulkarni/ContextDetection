@@ -1,17 +1,55 @@
 package com.example.nikhilkulkarni.contextdetection;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.ActivityRecognition;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private GoogleApiClient mAPIClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAPIClient = new GoogleApiClient.Builder(this)
+                .addApi(ActivityRecognition.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mAPIClient.connect();
+        System.out.println("Connected");
+    }
+
+    public void stopActivityRecognitionScan() {
+        mAPIClient.disconnect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Intent intent = new Intent(this, ActivityRecognitionService.class);
+        PendingIntent callbackIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mAPIClient, 0, callbackIntent);
+        System.out.println("Requested activity updates");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 
     @Override
