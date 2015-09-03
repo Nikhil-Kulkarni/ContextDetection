@@ -10,6 +10,8 @@ import com.google.android.gms.location.DetectedActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.logging.Handler;
+
 /**
  * Created by nikhilkulkarni on 8/30/15.
  */
@@ -26,20 +28,34 @@ public class ActivityRecognitionService extends IntentService {
         if (ActivityRecognitionResult.hasResult(intent)) {
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
             Log.d(TAG, "ActivityRecognitionResult: " + getFriendlyName(result.getMostProbableActivity().getType()));
-            Context context = getApplicationContext();
-            CharSequence text = result.toString();
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            final Context context = getApplicationContext();
+            final CharSequence text = getFriendlyName(result.getMostProbableActivity().getType());
+
+            android.os.Handler handler = new android.os.Handler(getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
 
             System.out.println(result.toString());
         } else {
             System.out.println("No activity recognition data");
-            Context context = getApplicationContext();
-            CharSequence text = "No activity recognition data was returned";
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            final Context context = getApplicationContext();
+            final CharSequence text = "No activity recognition data was returned";
+
+            android.os.Handler handler = new android.os.Handler(getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
         }
     }
 
