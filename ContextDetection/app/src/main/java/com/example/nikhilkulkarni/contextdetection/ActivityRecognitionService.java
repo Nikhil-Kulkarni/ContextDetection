@@ -1,12 +1,14 @@
 package com.example.nikhilkulkarni.contextdetection;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by nikhilkulkarni on 8/30/15.
@@ -24,9 +26,20 @@ public class ActivityRecognitionService extends IntentService {
         if (ActivityRecognitionResult.hasResult(intent)) {
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
             Log.d(TAG, "ActivityRecognitionResult: " + getFriendlyName(result.getMostProbableActivity().getType()));
+            Context context = getApplicationContext();
+            CharSequence text = result.toString();
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
             System.out.println(result.toString());
         } else {
             System.out.println("No activity recognition data");
+            Context context = getApplicationContext();
+            CharSequence text = "No activity recognition data was returned";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
 
