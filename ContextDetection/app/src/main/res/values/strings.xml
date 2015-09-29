@@ -3,4 +3,11 @@
 
     <string name="activity">Please wait for Toast indicating current activity</string>
     <string name="action_settings">Settings</string>
+    <string name="activityRecognition">Activity Recognition</string>
+    <string name="google_fit">Google Fit Recognition</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_google_fit">GoogleFit</string>
+    <string name="googleFitText">Please wait for activity</string>
 </resources>
